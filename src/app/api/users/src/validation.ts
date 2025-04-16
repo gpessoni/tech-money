@@ -33,9 +33,11 @@ export const updateUserValidation = Joi.object({
 })
 
 export const loginValidation = Joi.object({
-    username: Joi.string().trim().required().messages({
-        "any.required": "O nome de usuário é obrigatório",
-        "string.empty": "O nome de usuário não pode estar vazio",
+    email: Joi.string().trim().min(2).max(50).required().messages({
+        "any.required": "Email é obrigatório",
+        "string.empty": "Email não pode ser vazio",
+        "string.min": "Email deve ter pelo menos {#limit} caracteres",
+        "string.max": "Email deve ter no máximo {#limit} caracteres",
     }),
     password: Joi.string().trim().required().messages({
         "any.required": "A senha é obrigatória",

@@ -5,10 +5,54 @@ import { ListUsersResponse } from "../interfaces/user.interface";
 import jwt from "jsonwebtoken";
 
 export const userController = {
+  validateUserToken(id: string, req: Request) {
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return NextResponse.json(
+        { error: "Token não fornecido" },
+        { status: HttpStatus.UNAUTHORIZED }
+      );
+    }
+
+    const token = authHeader.split(" ")[1];
+    try {
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string) as jwt.JwtPayload;
+      const userId = decodedToken.sub;
+
+      if (userId !== id) {
+        return NextResponse.json(
+          { error: "Você não tem permissão para deletar este usuário" },
+          { status: HttpStatus.FORBIDDEN }
+        );
+      }
+    } catch (error) {
+      return NextResponse.json(
+        { error: "Token inválido ou expirado" },
+        { status: HttpStatus.UNAUTHORIZED }
+      );
+    }
+  },
+
   async createUser(req: Request) {
-    const body = await req.json();
-    const result = await userService.createUser(body);
-    return NextResponse.json(result.data || { error: result.error }, { status: result.status });
+    try {
+      const body = await req.json();
+
+      const existingUser = await userService.getUserByEmail(body.email);
+      if (existingUser.data) {
+        return NextResponse.json(
+          { error: "E-mail já cadastrado." },
+          { status: HttpStatus.CONFLICT }
+        );
+      }
+
+      const result = await userService.createUser(body);
+      return NextResponse.json(result.data || { error: result.error }, { status: result.status });
+    } catch (error) {
+      return NextResponse.json(
+        { error: "Erro ao criar o usuário." },
+        { status: HttpStatus.INTERNAL_SERVER_ERROR }
+      );
+    }
   },
 
   async loginUser(req: Request) {
@@ -18,17 +62,9 @@ export const userController = {
   },
 
   async deleteUser(id: string, req: Request) {
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return NextResponse.json({ error: "Token não fornecido" }, { status: HttpStatus.UNAUTHORIZED });
-    }
-    const token = authHeader.split(" ")[1];
-
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
-    const userId = decodedToken.sub;
-
-    if (userId !== id) {
-      return NextResponse.json({ error: "Você não tem permissão para deletar este usuário" }, { status: HttpStatus.FORBIDDEN });
+    const tokenValidationResponse = this.validateUserToken(id, req);
+    if (tokenValidationResponse) {
+      return tokenValidationResponse;
     }
 
     const result = await userService.deleteUser(id);
@@ -47,16 +83,38 @@ export const userController = {
 
   async updateUser(id: string, req: Request) {
     const body = await req.json();
+
+    const existingUser = await userService.getUserByEmail(body.email);
+    if (existingUser.data) {
+      return NextResponse.json(
+        { error: "E-mail já cadastrado." },
+        { status: HttpStatus.CONFLICT }
+      );
+    }
+
     const result = await userService.updateUser(id, body);
+
     return NextResponse.json(result.data || { error: result.error }, { status: result.status });
   },
 
   async validateToken(req: Request) {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
-      return NextResponse.json({ error: "Token não fornecido" }, { status: HttpStatus.UNAUTHORIZED });
+      return NextResponse.json(
+        { error: "Token não fornecido" },
+        { status: HttpStatus.UNAUTHORIZED }
+      );
     }
-    const result = await userService.validateToken(authHeader);
-    return NextResponse.json(result.data || { error: result.error }, { status: result.status });
+
+    try {
+      const token = authHeader.split(" ")[1];
+      jwt.verify(token, process.env.JWT_SECRET as string);
+      return NextResponse.json({ message: "Token válido" }, { status: HttpStatus.OK });
+    } catch {
+      return NextResponse.json(
+        { error: "Token inválido ou expirado" },
+        { status: HttpStatus.UNAUTHORIZED }
+      );
+    }
   },
 };

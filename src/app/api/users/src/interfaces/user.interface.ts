@@ -5,8 +5,14 @@ export interface User {
     password: string;
 }
 
+export interface UserWithoutPassowrd {
+    id: string;
+    email: string;
+    name: string;
+}
+
 export interface ListUsersResponse {
-    data?: User[];
+    data?: UserWithoutPassowrd[];
     error?: string;
     status: number;
 }

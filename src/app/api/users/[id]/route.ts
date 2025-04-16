@@ -29,21 +29,11 @@ export async function GET(req: Request, context: { params: { id: string } }) {
     }
 }
 
-export async function PATCH(req: Request, context: { params: { id: string } }) {
+export async function PUT(req: Request, context: { params: { id: string } }) {
     try {
-        const validateAuth: any = await userController.validateToken(req);
-        if (validateAuth.error) {
-            return NextResponse.json({ error: validateAuth.error }, { status: HttpStatus.UNAUTHORIZED })
-        }
-
-        const { id } = context.params
-        const body = await req.json()
-
-        if (!id) {
-            return NextResponse.json({ error: "ID do usuário é obrigatório" }, { status: HttpStatus.BAD_REQUEST })
-        }
-        return await userController.updateUser(id, body)
+        const { id } = context.params;
+        return await userController.updateUser(id, req);
     } catch (error) {
-        return NextResponse.json({ message: "Erro no servidor", error: (error as Error).message }, { status: HttpStatus.INTERNAL_SERVER_ERROR })
+        return NextResponse.json({ message: "Erro no servidor", error: (error as Error).message }, { status: HttpStatus.INTERNAL_SERVER_ERROR });
     }
 }

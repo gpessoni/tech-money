@@ -1,10 +1,9 @@
-import { loginService } from "../src/services/AuthUserService"
-import { validateToken } from "../src/services/ValidateTokenService";
+import { userController } from "../src/controllers/user.controller";
 
 export async function POST(req: Request) {
-    return await loginService(req)
+    return await userController.loginUser(req)
 }
 
 export async function GET(req: Request) {
-    return validateToken(req);
+    return await userController.validateToken(req);
 }

@@ -20,12 +20,17 @@ export const userService = {
     const { email, password, name } = body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.users.create({
-      data: { email, name, password: hashedPassword },
-      select: { id: true, email: true, name: true, createdAt: true, updatedAt: true },
-    });
+    try {
+      const user = await prisma.users.create({
+        data: { email, name, password: hashedPassword },
+        select: { id: true, email: true, name: true, createdAt: true, updatedAt: true },
+      });
 
-    return { status: HttpStatus.CREATED, data: user };
+      return { status: HttpStatus.CREATED, data: user };
+    } catch (err) {
+      console.error(err);
+      return { status: HttpStatus.INTERNAL_SERVER_ERROR, error: "Erro ao criar usuário." };
+    }
   },
 
   async loginUser(body: any) {
@@ -64,8 +69,8 @@ export const userService = {
       return { status: HttpStatus.NOT_FOUND, error: "Usuário não encontrado" };
     }
 
-    const deletedUser = await prisma.users.delete({ where: { id } });
-    return { status: HttpStatus.OK, data: deletedUser };
+    await prisma.users.delete({ where: { id } });
+    return { status: HttpStatus.NO_CONTENT };
   },
 
   async getUserById(id: string) {

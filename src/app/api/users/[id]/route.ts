@@ -4,7 +4,12 @@ import { HttpStatus } from "@/app/api/config/http/httpUtils"
 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
     try {
-        return await userController.deleteUser(params.id)
+        const validateAuth: any = await userController.validateToken(req);
+        if (validateAuth.error) {
+            return NextResponse.json({ error: validateAuth.error }, { status: HttpStatus.UNAUTHORIZED })
+        }
+
+        return await userController.deleteUser(params.id, req)
     } catch (error) {
         return NextResponse.json({ message: "Erro no servidor", error: (error as Error).message }, { status: HttpStatus.INTERNAL_SERVER_ERROR })
     }
@@ -26,6 +31,11 @@ export async function GET(req: Request, context: { params: { id: string } }) {
 
 export async function PATCH(req: Request, context: { params: { id: string } }) {
     try {
+        const validateAuth: any = await userController.validateToken(req);
+        if (validateAuth.error) {
+            return NextResponse.json({ error: validateAuth.error }, { status: HttpStatus.UNAUTHORIZED })
+        }
+
         const { id } = context.params
         const body = await req.json()
 

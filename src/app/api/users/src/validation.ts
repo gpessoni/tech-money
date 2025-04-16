@@ -1,11 +1,17 @@
 import Joi from "joi"
 
 export const createUserValidation = Joi.object({
-    username: Joi.string().trim().min(2).max(50).required().messages({
-        "any.required": "Nome de usuário é obrigatório",
-        "string.empty": "Nome de usuário não pode ser vazio",
-        "string.min": "Nome de usuário deve ter pelo menos {#limit} caracteres",
-        "string.max": "Nome de usuário deve ter no máximo {#limit} caracteres",
+    email: Joi.string().trim().min(2).max(50).required().messages({
+        "any.required": "Email é obrigatório",
+        "string.empty": "Email não pode ser vazio",
+        "string.min": "Email deve ter pelo menos {#limit} caracteres",
+        "string.max": "Email deve ter no máximo {#limit} caracteres",
+    }),
+    name: Joi.string().trim().min(2).max(50).required().messages({  
+        "any.required": "Nome é obrigatório",   
+        "string.empty": "Nome não pode ser vazio",
+        "string.min": "Nome deve ter pelo menos {#limit} caracteres",   
+        "string.max": "Nome deve ter no máximo {#limit} caracteres",
     }),
     password: Joi.string().min(8).required().messages({
         "any.required": "Senha é obrigatória",
@@ -17,9 +23,9 @@ export const createUserValidation = Joi.object({
 export const deleteUserValidation = Joi.string().uuid().required()
 
 export const updateUserValidation = Joi.object({
-    username: Joi.string().trim().min(2).max(50).messages({
-        "string.min": "Nome de usuário deve ter pelo menos {#limit} caracteres",
-        "string.max": "Nome de usuário deve ter no máximo {#limit} caracteres",
+    name: Joi.string().trim().min(2).max(50).messages({
+        "string.min": "Nome deve ter pelo menos {#limit} caracteres",
+        "string.max": "Nome deve ter no máximo {#limit} caracteres",
     }),
     password: Joi.string().min(8).messages({
         "string.min": "Senha deve ter pelo menos {#limit} caracteres",

@@ -1,4 +1,21 @@
+'use client';
+
+import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+
 export default function Home() {
+  const dadosGrafico = [
+    { name: 'Receitas', value: 7000 },
+    { name: 'Despesas', value: 2000 },
+  ];
+
+  const dadosMensais = [
+    { mes: 'Jan', receitas: 5000, despesas: 3000 },
+    { mes: 'Fev', receitas: 6000, despesas: 3500 },
+    { mes: 'Mar', receitas: 7000, despesas: 2000 },
+  ];
+
+  const COLORS = ['#059669', '#dc2626'];
+
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#f3f4f6', padding: '2rem' }}>
       <div style={{ maxWidth: '56rem', margin: '0 auto' }}>
@@ -21,7 +38,52 @@ export default function Home() {
             <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#dc2626' }}>R$ 2.000,00</p>
           </div>
         </div>
-        
+
+        {/* Gráficos */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
+          {/* Gráfico de Pizza */}
+          <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem' }}>Distribuição Financeira</h2>
+            <div style={{ height: '300px' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={dadosGrafico}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {dadosGrafico.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Gráfico de Barras */}
+          <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem' }}>Evolução Mensal</h2>
+            <div style={{ height: '300px' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={dadosMensais}>
+                  <XAxis dataKey="mes" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="receitas" fill="#059669" />
+                  <Bar dataKey="despesas" fill="#dc2626" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+          
         {/* Lista de Transações */}
         <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem' }}>Últimas Transações</h2>

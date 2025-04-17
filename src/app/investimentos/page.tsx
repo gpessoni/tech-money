@@ -39,9 +39,7 @@ export default function Investimentos() {
         }
       });
       const data = await response.json();
-      if (data.data) {
-        setInvestimentos(data.data);
-      }
+      setInvestimentos(data);
     } catch (error) {
       console.error('Erro ao buscar investimentos:', error);
     }
@@ -58,7 +56,7 @@ export default function Investimentos() {
         },
         body: JSON.stringify(formData)
       });
-      
+
       if (response.ok) {
         setShowCreateModal(false);
         fetchInvestimentos();
@@ -71,7 +69,7 @@ export default function Investimentos() {
 
   const handleEdit = async () => {
     if (!selectedInvestment) return;
-    
+
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`/api/investments/${selectedInvestment.id}`, {
@@ -82,7 +80,7 @@ export default function Investimentos() {
         },
         body: JSON.stringify(formData)
       });
-      
+
       if (response.ok) {
         setShowEditModal(false);
         fetchInvestimentos();
@@ -96,7 +94,7 @@ export default function Investimentos() {
 
   const handleDelete = async () => {
     if (!selectedInvestment) return;
-    
+
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`/api/investments/${selectedInvestment.id}`, {
@@ -105,7 +103,7 @@ export default function Investimentos() {
           'Authorization': `Bearer ${token}`
         }
       });
-      
+
       if (response.ok) {
         setShowDeleteModal(false);
         fetchInvestimentos();
@@ -120,7 +118,7 @@ export default function Investimentos() {
   const rendimentoTotal = investimentos.reduce((acc, inv) => acc + (inv.amount * inv.yield / 100), 0);
 
   const dataPie = investimentos.map(inv => ({
-    name: inv.name,
+    name: inv.category,
     value: inv.amount
   }));
 
@@ -135,12 +133,12 @@ export default function Investimentos() {
             <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#1f2937' }}>
               Meus Investimentos
             </h1>
-            <button 
+            <button
               onClick={() => setShowCreateModal(true)}
-              style={{ 
-                backgroundColor: '#059669', 
-                color: 'white', 
-                padding: '0.5rem 1rem', 
+              style={{
+                backgroundColor: '#059669',
+                color: 'white',
+                padding: '0.5rem 1rem',
                 borderRadius: '0.375rem',
                 border: 'none',
                 cursor: 'pointer'
@@ -198,7 +196,7 @@ export default function Investimentos() {
               <div style={{ height: '300px' }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={investimentos}>
-                    <XAxis dataKey="name" />
+                    <XAxis dataKey="category" />
                     <YAxis />
                     <Tooltip />
                     <Bar dataKey="yield" fill="#8884d8" />
@@ -317,13 +315,19 @@ export default function Investimentos() {
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
               <label style={{ display: 'block', marginBottom: '0.5rem' }}>Categoria</label>
-              <input
-                type="text"
+              <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 style={{ width: '100%', padding: '0.5rem', border: '1px solid #d1d5db', borderRadius: '0.375rem' }}
-              />
+              >
+                <option value="" disabled>Selecione uma categoria</option>
+                <option value="CDB">CDB</option>
+                <option value="Ações">Ações</option>
+                <option value="Tesouro Direto">Tesouro Direto</option>
+                <option value="Fundos Imobiliários">Fundos Imobiliários</option>
+              </select>
             </div>
+
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
               <button
                 onClick={() => setShowCreateModal(false)}
@@ -393,12 +397,17 @@ export default function Investimentos() {
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
               <label style={{ display: 'block', marginBottom: '0.5rem' }}>Categoria</label>
-              <input
-                type="text"
+              <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 style={{ width: '100%', padding: '0.5rem', border: '1px solid #d1d5db', borderRadius: '0.375rem' }}
-              />
+              >
+                <option value="" disabled>Selecione uma categoria</option>
+                <option value="CDB">CDB</option>
+                <option value="Ações">Ações</option>
+                <option value="Tesouro Direto">Tesouro Direto</option>
+                <option value="Fundos Imobiliários">Fundos Imobiliários</option>
+              </select>
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
               <button

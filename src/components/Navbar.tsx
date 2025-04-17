@@ -1,11 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    router.push('/');
+  };
 
   const navItems = [
     { name: 'Relatórios', path: '/relatorios' },
@@ -45,7 +51,7 @@ export default function Navbar() {
             </div>
           </div>
           
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <Link 
               href="/perfil" 
               style={{
@@ -73,6 +79,28 @@ export default function Navbar() {
               </div>
               <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>Perfil</span>
             </Link>
+
+          {/* Botão de logout */}
+          <button
+            onClick={handleLogout}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.375rem',
+              backgroundColor: 'transparent',
+              border: '1px solid #e5e7eb',
+              cursor: 'pointer',
+              color: '#6b7280',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              transition: 'all 0.2s',
+            }}
+          >
+            <span>🚪</span>
+            Sair
+          </button>
           </div>
         </div>
       </div>

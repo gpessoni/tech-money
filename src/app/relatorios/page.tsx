@@ -1,5 +1,6 @@
 'use client';
 
+import Navbar from '@/components/Navbar';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 
 export default function Home() {
@@ -17,8 +18,10 @@ export default function Home() {
   const COLORS = ['#059669', '#dc2626'];
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#f3f4f6', padding: '2rem' }}>
-      <div style={{ maxWidth: '56rem', margin: '0 auto' }}>
+    <>
+      <Navbar />
+      <main style={{ minHeight: '100vh', backgroundColor: '#f3f4f6', padding: '2rem' }}>
+        <div style={{ maxWidth: '56rem', margin: '0 auto' }}>
         <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#1f2937', marginBottom: '2rem' }}>
           Controle Financeiro Pessoal
         </h1>
@@ -113,5 +116,6 @@ export default function Home() {
         </div>
       </div>
     </main>
+    </>
   );
 }

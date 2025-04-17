@@ -8,14 +8,15 @@ datasource db {
 }
 
 model Users {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  name      String
-  password  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  expenses  Expense[]
-  incomes   Incomes[]
+  id         String       @id @default(uuid())
+  email      String       @unique
+  name       String
+  password   String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  expenses   Expense[]
+  incomes    Incomes[]
+  Investment Investment[]
 }
 
 model Expense {
@@ -41,4 +42,14 @@ enum ExpenseType {
   RECURRENT
   ONE_TIME
   INSTALLMENT
+}
+
+model Investment {
+  id       String @id @default(uuid())
+  name     String
+  amount   Float
+  yield    Float
+  category String
+  userId   String
+  user     Users  @relation(fields: [userId], references: [id])
 }

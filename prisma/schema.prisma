@@ -63,6 +63,7 @@ model Investment {
   category String
   userId   String
   user     Users  @relation(fields: [userId], references: [id])
+  date        DateTime    @default(now())
 }
 
 enum IncomeType {

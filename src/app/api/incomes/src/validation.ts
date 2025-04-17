@@ -15,6 +15,10 @@ export const createIncomeValidation = Joi.object({
     date: Joi.date().default(Date.now).messages({
         "date.base": "Data inválida"
     }),
+    type: Joi.string().valid('SALARY', 'FREELANCE', 'INVESTMENT', 'RENT', 'OTHER').required().messages({
+        "any.required": "Tipo é obrigatório",
+        "any.only": "Tipo inválido"
+    }),
     userId: Joi.string().uuid().required().messages({
         "any.required": "ID do usuário é obrigatório",
         "string.guid": "ID do usuário inválido"
@@ -32,6 +36,9 @@ export const updateIncomeValidation = Joi.object({
     }),
     date: Joi.date().messages({
         "date.base": "Data inválida"
+    }),
+    type: Joi.string().valid('SALARY', 'FREELANCE', 'INVESTMENT', 'RENT', 'OTHER').messages({
+        "any.only": "Tipo inválido"
     })
 })
 

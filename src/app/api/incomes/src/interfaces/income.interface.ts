@@ -3,6 +3,7 @@ export interface Income {
     amount: number;
     description: string;
     date: Date;
+    type: 'SALARY' | 'FREELANCE' | 'INVESTMENT' | 'RENT' | 'OTHER';
     userId: string;
 }
 

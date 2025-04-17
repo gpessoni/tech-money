@@ -3,6 +3,14 @@ import { incomeService } from "../services/income.service";
 import { NextResponse } from "next/server";
 import { ListIncomesResponse } from "../interfaces/income.interface";
 import jwt from "jsonwebtoken";
+import { IncomeType } from "@prisma/client";
+
+interface IncomeBody {
+  amount: number;
+  description: string;
+  type: IncomeType;
+  userId: string;
+}
 
 export const incomeController = {
   validateUserToken(userId: string, req: Request) {
@@ -33,7 +41,7 @@ export const incomeController = {
     }
   },
 
-  async createIncome(body: any) {
+  async createIncome(body: IncomeBody) {
     try {
       const result = await incomeService.createIncome(body);
       return NextResponse.json(result.data || { error: result.error }, { status: result.status });
@@ -82,7 +90,7 @@ export const incomeController = {
       return tokenValidationResponse;
     }
 
-    const body = await req.json();
+    const body = await req.json() as IncomeBody;
     const result = await incomeService.updateIncome(id, body);
     return NextResponse.json(result.data || { error: result.error }, { status: result.status });
   }

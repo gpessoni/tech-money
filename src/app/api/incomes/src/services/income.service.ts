@@ -7,6 +7,7 @@ import {
   updateIncomeValidation,
 } from "../validation";
 import { Income, ListIncomesResponse } from "../interfaces/income.interface";
+import { IncomeType } from "@prisma/client";
 
 interface ServiceResponse<T> {
   status: number;
@@ -28,12 +29,12 @@ export const incomeService = {
       };
     }
 
-    const { amount, description, date, userId } = body;
+    const { amount, description, date, userId, type } = body;
 
-    if (!amount || !description || !userId) {
+    if (!amount || !description || !userId || !type) {
       return {
         status: HttpStatus.BAD_REQUEST,
-        error: "Valor, descrição e usuário são obrigatórios.",
+        error: "Valor, descrição, tipo e usuário são obrigatórios.",
       };
     }
 
@@ -43,7 +44,8 @@ export const incomeService = {
           amount,
           description,
           date: date || new Date(),
-          userId
+          userId,
+          type
         }
       });
 

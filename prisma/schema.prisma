@@ -34,6 +34,7 @@ model Incomes {
   amount      Float
   description String
   date        DateTime @default(now())
+  type        IncomeType
   userId      String
   user        Users    @relation(fields: [userId], references: [id])
 }
@@ -52,4 +53,12 @@ model Investment {
   category String
   userId   String
   user     Users  @relation(fields: [userId], references: [id])
+}
+
+enum IncomeType {
+  SALARY
+  FREELANCE
+  INVESTMENT
+  RENT
+  OTHER
 }

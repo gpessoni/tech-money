@@ -1,6 +1,6 @@
 // userService.ts
 import { prisma } from "@/app/api/config/prisma";
-import bcrypt from "bcrypt";
+import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 import { HttpStatus } from "@/app/api/config/http/httpUtils";
 import {

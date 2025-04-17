@@ -80,8 +80,8 @@ export default function Home() {
 
   const mediaReceitas = totalIncomes / (incomes.length || 1);
   const mediaDespesas = totalExpenses / (expenses.length || 1);
-  const percentualEconomia = ((totalIncomes - totalExpenses) / totalIncomes) * 100 || 0;
-  const percentualInvestido = (totalInvestments / totalIncomes) * 100 || 0;
+  const percentualEconomia = totalIncomes > 0 ? ((totalIncomes - totalExpenses) / totalIncomes) * 100 : 0;
+  const percentualInvestido = totalIncomes > 0 ? (totalInvestments / totalIncomes) * 100 : 0;
   const rendimentoTotal = investments.reduce((acc, curr) => acc + (curr.yield || 0), 0);
   const rendimentoMedio = rendimentoTotal / (investments.length || 1);
 
@@ -111,15 +111,15 @@ export default function Home() {
 
   const calcularTendenciaGastos = () => {
     if (expenses.length < 2) return 0;
-    
+
     const mesesOrdenados = Object.entries(mesesExpenses)
       .sort((a, b) => new Date(a[0]).getTime() - new Date(b[0]).getTime());
-    
+
     if (mesesOrdenados.length < 2) return 0;
-    
+
     const ultimoMes = mesesOrdenados[mesesOrdenados.length - 1][1];
     const penultimoMes = mesesOrdenados[mesesOrdenados.length - 2][1];
-    
+
     return ((ultimoMes - penultimoMes) / penultimoMes) * 100;
   };
 
@@ -159,9 +159,9 @@ export default function Home() {
     return (
       <div style={{ textAlign: 'center', padding: '2rem', color: '#dc2626' }}>
         <p>{error}</p>
-        <button 
+        <button
           onClick={() => window.location.reload()}
-          style={{ 
+          style={{
             marginTop: '1rem',
             padding: '0.5rem 1rem',
             backgroundColor: '#3b82f6',
@@ -200,7 +200,7 @@ export default function Home() {
           <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#1f2937', marginBottom: '2rem' }}>
             Controle Financeiro Pessoal
           </h1>
-          
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
             <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
               <h2 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#4b5563' }}>Saldo Total</h2>
@@ -316,10 +316,10 @@ export default function Home() {
                     <YAxis />
                     <Tooltip formatter={(value: number) => formatarMoeda(value)} />
                     <Legend />
-                    <Line 
-                      type="monotone" 
-                      dataKey="saldo" 
-                      stroke="#8b5cf6" 
+                    <Line
+                      type="monotone"
+                      dataKey="saldo"
+                      stroke="#8b5cf6"
                       name="Saldo"
                       dot={{ r: 4 }}
                       activeDot={{ r: 8 }}
@@ -331,7 +331,7 @@ export default function Home() {
 
             <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
               <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem' }}>Despesas por Categoria</h2>
-              
+
               {dadosCategorias.length > 0 ? (
                 <div style={{ height: '300px' }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -362,133 +362,131 @@ export default function Home() {
               )}
             </div>
           </div>
-            
-          <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '2rem' }}>Últimas Transações</h2>
-            
-            {incomes.length > 0 ? (
-              <div style={{ marginBottom: '2rem' }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '1rem', color: '#059669' }}>Receitas</h3>
-                <div style={{ overflowX: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead>
-                      <tr style={{ backgroundColor: '#f9fafb' }}>
-                        <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Descrição</th>
-                        <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Data</th>
-                        <th style={{ padding: '0.75rem', textAlign: 'right', borderBottom: '1px solid #e5e7eb' }}>Valor</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {incomes
-                        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                        .slice(0, 5)
-                        .map((income) => (
-                          <tr key={income.id} style={{ transition: 'background-color 0.2s' }}>
-                            <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{income.description}</td>
-                            <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{formatarData(income.date)}</td>
-                            <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb', textAlign: 'right', color: '#059669' }}>
-                              +{formatarMoeda(income.amount)}
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            ) : (
-              <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '0.5rem', marginBottom: '2rem' }}>
-                <p>Nenhuma receita registrada</p>
-              </div>
-            )}
 
-            {expenses.length > 0 ? (
-              <div style={{ marginBottom: '2rem' }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '1rem', color: '#dc2626' }}>Despesas</h3>
-                <div style={{ overflowX: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead>
-                      <tr style={{ backgroundColor: '#f9fafb' }}>
-                        <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Descrição</th>
-                        <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Data</th>
-                        <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Categoria</th>
-                        <th style={{ padding: '0.75rem', textAlign: 'right', borderBottom: '1px solid #e5e7eb' }}>Valor</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {expenses
-                        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                        .slice(0, 5)
-                        .map((expense) => (
-                          <tr key={expense.id} style={{ transition: 'background-color 0.2s' }}>
-                            <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{expense.description}</td>
-                            <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{formatarData(expense.date)}</td>
-                            <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>
-                              <span style={{ 
-                                fontSize: '0.75rem', 
-                                backgroundColor: '#e5e7eb', 
-                                padding: '0.25rem 0.5rem', 
-                                borderRadius: '0.25rem',
-                                display: 'inline-block'
-                              }}>
-                                {expense.category || 'Sem categoria'}
-                              </span>
-                            </td>
-                            <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb', textAlign: 'right', color: '#dc2626' }}>
-                              -{formatarMoeda(expense.amount)}
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            ) : (
-              <>  </>
-            )}
+          {incomes.length > 0 || expenses.length > 0 || investments.length > 0 && (
+            <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '2rem' }}>Últimas Transações</h2>
 
-            {investments.length > 0 ? (
-              <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '1rem', color: '#3b82f6' }}>Investimentos</h3>
-                <div style={{ overflowX: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead>
-                      <tr style={{ backgroundColor: '#f9fafb' }}>
-                        <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Categoria</th>
-                        <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Yield</th>
-                        <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Data</th>
-                        <th style={{ padding: '0.75rem', textAlign: 'right', borderBottom: '1px solid #e5e7eb' }}>Valor</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {investments
-                        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                        .slice(0, 5)
-                        .map((investment) => (
-                          <tr key={investment.id} style={{ transition: 'background-color 0.2s' }}>
-                            <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{investment.category || 'Sem categoria'}</td>
-                            <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>
-                              <span style={{ 
-                                color: investment.yield && investment.yield > 0 ? '#059669' : '#dc2626'
-                              }}>
-                                {investment.yield}%
-                              </span>
-                            </td>
-                            <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{formatarData(investment.date)}</td>
-                            <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb', textAlign: 'right', color: '#3b82f6' }}>
-                              {formatarMoeda(investment.amount)}
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
+              {incomes.length > 0 ? (
+                <div style={{ marginBottom: '2rem' }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '1rem', color: '#059669' }}>Receitas</h3>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                      <thead>
+                        <tr style={{ backgroundColor: '#f9fafb' }}>
+                          <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Descrição</th>
+                          <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Data</th>
+                          <th style={{ padding: '0.75rem', textAlign: 'right', borderBottom: '1px solid #e5e7eb' }}>Valor</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {incomes
+                          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                          .slice(0, 5)
+                          .map((income) => (
+                            <tr key={income.id} style={{ transition: 'background-color 0.2s' }}>
+                              <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{income.description}</td>
+                              <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{formatarData(income.date)}</td>
+                              <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb', textAlign: 'right', color: '#059669' }}>
+                                +{formatarMoeda(income.amount)}
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '0.5rem' }}>
-                <p>Nenhum investimento registrado</p>
-              </div>
-            )}
-          </div>
+              ) : (
+                <>  </>
+              )}
+
+              {expenses.length > 0 ? (
+                <div style={{ marginBottom: '2rem' }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '1rem', color: '#dc2626' }}>Despesas</h3>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                      <thead>
+                        <tr style={{ backgroundColor: '#f9fafb' }}>
+                          <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Descrição</th>
+                          <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Data</th>
+                          <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Categoria</th>
+                          <th style={{ padding: '0.75rem', textAlign: 'right', borderBottom: '1px solid #e5e7eb' }}>Valor</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {expenses
+                          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                          .slice(0, 5)
+                          .map((expense) => (
+                            <tr key={expense.id} style={{ transition: 'background-color 0.2s' }}>
+                              <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{expense.description}</td>
+                              <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{formatarData(expense.date)}</td>
+                              <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>
+                                <span style={{
+                                  fontSize: '0.75rem',
+                                  backgroundColor: '#e5e7eb',
+                                  padding: '0.25rem 0.5rem',
+                                  borderRadius: '0.25rem',
+                                  display: 'inline-block'
+                                }}>
+                                  {expense.category || 'Sem categoria'}
+                                </span>
+                              </td>
+                              <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb', textAlign: 'right', color: '#dc2626' }}>
+                                -{formatarMoeda(expense.amount)}
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ) : (
+                <>  </>
+              )}
+
+              {investments.length > 0 ? (
+                <div>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '1rem', color: '#3b82f6' }}>Investimentos</h3>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                      <thead>
+                        <tr style={{ backgroundColor: '#f9fafb' }}>
+                          <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Categoria</th>
+                          <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Yield</th>
+                          <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Data</th>
+                          <th style={{ padding: '0.75rem', textAlign: 'right', borderBottom: '1px solid #e5e7eb' }}>Valor</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {investments
+                          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                          .slice(0, 5)
+                          .map((investment) => (
+                            <tr key={investment.id} style={{ transition: 'background-color 0.2s' }}>
+                              <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{investment.category || 'Sem categoria'}</td>
+                              <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>
+                                <span style={{
+                                  color: investment.yield && investment.yield > 0 ? '#059669' : '#dc2626'
+                                }}>
+                                  {investment.yield}%
+                                </span>
+                              </td>
+                              <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{formatarData(investment.date)}</td>
+                              <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb', textAlign: 'right', color: '#3b82f6' }}>
+                                {formatarMoeda(investment.amount)}
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ) : (
+                <>  </>
+              )}
+            </div>
+          )}
         </div>
       </main>
     </>

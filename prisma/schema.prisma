@@ -22,11 +22,27 @@ model Users {
 model Expense {
   id          String      @id @default(uuid())
   amount      Float
-  type        ExpenseType
+  category    ExpenseCategory
   description String
   date        DateTime    @default(now())
   userId      String
   user        Users       @relation(fields: [userId], references: [id])
+}
+
+enum ExpenseCategory {
+  ALIMENTACAO
+  TRANSPORTE
+  SAUDE
+  EDUCACAO
+  MORADIA
+  LAZER
+  VESTUARIO
+  SERVICOS
+  IMPOSTOS
+  SEGUROS
+  PRESENTES
+  VIAGENS
+  OUTROS
 }
 
 model Incomes {
@@ -37,12 +53,6 @@ model Incomes {
   type        IncomeType
   userId      String
   user        Users    @relation(fields: [userId], references: [id])
-}
-
-enum ExpenseType {
-  RECURRENT
-  ONE_TIME
-  INSTALLMENT
 }
 
 model Investment {

@@ -1,90 +1,90 @@
-SmartStock
-==========
+# Tech Money
 
-O **SmartStock** é um sistema de gestão de estoque desenvolvido para atender pequenas e médias empresas que buscam uma solução eficiente, intuitiva e acessível para o gerenciamento de seus estoques e almoxarifado. Com foco em simplicidade e funcionalidades completas, o SmartStock ajuda a otimizar processos operacionais e a reduzir erros comuns em sistemas menos robustos ou controles manuais, como planilhas.
+O *Tech Money* é uma aplicação web desenvolvida para auxiliar no controle e gerenciamento financeiro, oferecendo uma interface moderna e intuitiva para acompanhamento de despesas, receitas e análises financeiras.
 
-Documentação da API
--------------------
+## Tecnologias Utilizadas
 
-*   **Swagger**: [Acesse aqui](https://app.swaggerhub.com/apis/PESSONIGS/SmartStock/1.0.0#/)
-    
-*   **Postman**: [Visualize aqui](https://documenter.getpostman.com/view/39038855/2sAY518KyZ)
-    
+* *Next.js 14*: Framework React moderno para desenvolvimento web
+* *TypeScript*: Linguagem de programação tipada baseada em JavaScript
+* *Prisma*: ORM para manipulação e interação com o banco de dados
+* *Docker*: Containerização para ambiente de desenvolvimento consistente
+* *PrimeReact*: Biblioteca de componentes UI rica e responsiva
+* *Chart.js*: Biblioteca para criação de gráficos e visualizações de dados
+* *Styled Components*: Biblioteca para estilização de componentes
+* *JWT*: Autenticação e autorização de usuários
 
-Tecnologias Utilizadas
-----------------------
+## Como Iniciar o Projeto
 
-*   **Next.js**: Framework de desenvolvimento web com React.
-    
-*   **Prisma**: ORM para manipulação e interação com o banco de dados.
-    
-*   **Docker**: Ferramenta para containerização, garantindo consistência em ambientes de desenvolvimento e produção.
-    
-*   **PostgreSQL**: Banco de dados relacional utilizado para armazenamento de dados.
-    
+1. Clone o repositório:
+bash
+git clone [URL_DO_REPOSITÓRIO]
+cd tech-money
 
-Como Iniciar o Projeto
-----------------------
 
-1.  git clone cd SmartStocknpm install
-    
-2.  docker-compose up
-    
-3.  npx prisma migrate dev
-    
-4.  npm run dev# ouyarn dev# oupnpm dev# oubun dev
-    
-5.  **Acessar a aplicação**: Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
-    
+2. Instale as dependências:
+bash
+npm install
 
-Estrutura do Projeto
---------------------
 
-A página principal pode ser editada em app/page.tsx. As alterações são aplicadas automaticamente enquanto você desenvolve.
+3. Inicie o container Docker:
+bash
+docker-compose up -d
 
-Este projeto utiliza [next/font](https://nextjs.org/docs/basic-features/font-optimization) para otimizar e carregar fontes personalizadas, como o Google Font "Inter".
 
-Funcionalidades Principais
---------------------------
+4. Execute as migrações do Prisma:
+bash
+npx prisma migrate dev
 
-*   **Gerenciamento de Produtos**: Organização dos produtos por tipo, grupo e unidade de medida.
-    
-*   **Endereços de Armazenamento**: Controle detalhado de saldos em diferentes locais do almoxarifado.
-    
-*   **Sistema de Inventário**: Registro e processamento de inventários de produtos.
-    
-*   **Solicitações de Estoque**: Movimentação e controle de produtos desde a solicitação até a separação e entrega.
-    
-*   **Transferências Internas**: Realização de transferências entre diferentes endereços de armazenamento com rastreamento completo.
-    
 
-Benefícios do Sistema
----------------------
+5. Inicie o servidor de desenvolvimento:
+bash
+npm run dev
 
-O **SmartStock** foi projetado para atender às demandas de gestão de estoque de pequenas e médias empresas, onde soluções simples como planilhas se tornam inadequadas à medida que a complexidade e o volume de dados aumentam. Com o SmartStock, é possível:
 
-*   Reduzir erros operacionais.
-    
-*   Melhorar a eficiência na gestão de estoque.
-    
-*   Controlar de forma centralizada entradas e saídas de produtos.
-    
-*   Facilitar a integração com outras plataformas e ferramentas empresariais.
-    
+6. Acesse a aplicação em [http://localhost:3000](http://localhost:3000)
 
-Deploy
-------
+## Scripts Disponíveis
 
-A forma mais fácil de implantar uma aplicação Next.js é utilizando a [plataforma Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme), criada pelos desenvolvedores do Next.js. Para mais detalhes sobre como fazer o deploy, consulte a [documentação de deploy do Next.js](https://nextjs.org/docs/deployment).
+* npm run dev: Inicia o servidor de desenvolvimento
+* npm run build: Cria a versão de produção
+* npm run start: Inicia o servidor de produção
+* npm run lint: Executa a verificação de código
+* npm run seed: Popula o banco de dados com dados iniciais
 
-Aprenda Mais
-------------
+## Funcionalidades Principais
 
-Para saber mais sobre o Next.js, confira os seguintes recursos:
+* *Gestão de Finanças*: Controle completo de receitas e despesas
+* *Dashboards*: Visualizações gráficas e análises financeiras
+* *Relatórios*: Geração de relatórios em PDF e Excel
+* *Autenticação*: Sistema seguro de login e autenticação
+* *Interface Responsiva*: Design adaptável para diferentes dispositivos
 
-*   [Documentação do Next.js](https://nextjs.org/docs) – informações detalhadas sobre recursos e API do Next.js.
-    
-*   [Tutorial interativo de Next.js](https://nextjs.org/learn) – aprenda Next.js de forma prática e interativa.
-    
+## Estrutura do Projeto
 
-Visite também o [repositório do Next.js no GitHub](https://github.com/vercel/next.js) para contribuições e feedback.
+* /src: Código fonte principal
+* /prisma: Schemas e migrações do banco de dados
+* /public: Arquivos estáticos
+* /components: Componentes React reutilizáveis
+* /pages: Rotas e páginas da aplicação
+
+## Requisitos do Sistema
+
+* Node.js 18+
+* Docker e Docker Compose
+* NPM ou Yarn
+
+## Contribuição
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (git checkout -b feature/AmazingFeature)
+3. Commit suas mudanças (git commit -m 'Add some AmazingFeature')
+4. Push para a branch (git push origin feature/AmazingFeature)
+5. Abra um Pull Request
+
+## Deploy
+
+O projeto pode ser facilmente implantado na [Vercel](https://vercel.com), plataforma otimizada para aplicações Next.js. Para outras opções de deploy, consulte a [documentação oficial do Next.js](https://nextjs.org/docs/deployment).
+
+## Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
